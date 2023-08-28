@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:status_app/models/user_model.dart';
+import 'package:status_app/services/user_service.dart';
 
 class Page2 extends StatelessWidget {
   const Page2({super.key});
@@ -7,7 +9,15 @@ class Page2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Page 2'),
+        title: StreamBuilder(
+          stream: userService.userStream, 
+          builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+            if (!snapshot.hasData) {
+              return const Text('No user');
+            }
+            return Text('Page 2 - ${snapshot.data!.name}');
+          }
+        ),
       ),
       body: Center(
         child: Column(
@@ -18,7 +28,15 @@ class Page2 extends StatelessWidget {
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,
               ),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                userService.setUser(
+                  User(
+                    name: 'John', 
+                    age: 30, 
+                    professions: ['Software Engineer']
+                  )
+                );
+              },
               child: const Text('Set user'),
             ),
             ElevatedButton(
@@ -26,7 +44,9 @@ class Page2 extends StatelessWidget {
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,
               ),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                userService.changeAge(31);
+              },
               child: const Text('Change age'),
             ),
             ElevatedButton(
