@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:status_app/models/user_model.dart';
+import 'package:status_app/services/user_service.dart';
 
 class Page2 extends StatelessWidget {
   const Page2({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    final userService = Provider.of<UserService>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Page 2'),
+        title: userService.existsUser
+          ? Text(userService.user.name)
+          : const Text('Page 2'),
       ),
       body: Center(
         child: Column(
@@ -18,7 +26,13 @@ class Page2 extends StatelessWidget {
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,
               ),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                userService.user = User(
+                  name: 'John Doe',
+                  age: 30,
+                  professions: ['Software Engineer']
+                );
+              },
               child: const Text('Set user'),
             ),
             ElevatedButton(
@@ -26,7 +40,9 @@ class Page2 extends StatelessWidget {
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,
               ),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                userService.changeAge(31);
+              },
               child: const Text('Change age'),
             ),
             ElevatedButton(
@@ -34,7 +50,9 @@ class Page2 extends StatelessWidget {
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,
               ),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                userService.addProfession('Doctor');
+              },
               child: const Text('Add profession'),
             ),
           ],
