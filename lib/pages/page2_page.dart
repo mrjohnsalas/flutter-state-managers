@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:status_app/bloc/user/user_cubit.dart';
+import 'package:status_app/models/user_model.dart';
 
 class Page2 extends StatelessWidget {
   const Page2({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    final userCubit = context.read<UserCubit>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Page 2'),
@@ -18,7 +24,13 @@ class Page2 extends StatelessWidget {
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,
               ),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                userCubit.setUser(User(
+                  name: 'John Doe',
+                  age: 30,
+                  professions: ['Software Engineer'],
+                ));
+              },
               child: const Text('Set user'),
             ),
             ElevatedButton(
@@ -26,7 +38,7 @@ class Page2 extends StatelessWidget {
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,
               ),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => userCubit.changeAge(38),
               child: const Text('Change age'),
             ),
             ElevatedButton(
@@ -34,7 +46,7 @@ class Page2 extends StatelessWidget {
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,
               ),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => userCubit.addProfession('Doctor'),
               child: const Text('Add profession'),
             ),
           ],
